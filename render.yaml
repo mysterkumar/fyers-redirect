@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: fyers-redirect
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn redirect_server:app
+    plan: free
