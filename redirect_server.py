@@ -47,3 +47,14 @@ def callback():
                 </body>
             </html>
         """
+
+@app.route('/token')
+def get_token():
+    try:
+        with open("access_token.json", "r") as token_file:
+            token_data = json.load(token_file)
+        return token_data, 200
+    except FileNotFoundError:
+        return {"error": "access_token.json not found"}, 404
+    except Exception as e:
+        return {"error": f"An error occurred: {str(e)}"}, 500
