@@ -22,7 +22,31 @@ def callback():
     
     try:
         response = requests.post(token_url, json=payload)
-        token_data = response.json()
+        
+        # Check if the response contains valid JSON
+        if response.status_code == 200:
+            try:
+                token_data = response.json()
+            except json.JSONDecodeError:
+                print("\n❌ Error: Invalid JSON response from Fyers API\n")
+                return """
+                    <html>
+                        <body style="text-align: center; font-family: Arial, sans-serif; margin-top: 50px;">
+                            <h1>❌ Authentication Error</h1>
+                            <p>Invalid response received from Fyers API.</p>
+                        </body>
+                    </html>
+                """
+        else:
+            print(f"\n❌ Error: Received status code {response.status_code} from Fyers API\n")
+            return """
+                <html>
+                    <body style="text-align: center; font-family: Arial, sans-serif; margin-top: 50px;">
+                        <h1>❌ Authentication Error</h1>
+                        <p>Failed to fetch token. Please try again later.</p>
+                    </body>
+                </html>
+            """
         
         # Save token to file
         with open("access_token.json", "w") as token_file:
