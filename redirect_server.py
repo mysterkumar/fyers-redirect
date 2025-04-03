@@ -11,7 +11,7 @@ def callback():
     print(f"\n🔐 AUTH CODE: {auth_code}\n")
     
     # POST to Fyers API to get access token
-    token_url = "https://api.fyers.in/api/v2/token"
+    token_url = "https://api.fyers.in/api/v3/token"
     payload = {
         "grant_type": "authorization_code",
         "appIdHash": os.environ.get("FYERS_APP_ID_HASH"),
