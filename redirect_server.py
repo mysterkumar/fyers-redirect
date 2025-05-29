@@ -49,11 +49,24 @@ def callback():
                 """
         else:
             print(f"\n❌ Error: Received status code {response.status_code} from Fyers API\n")
-            return """
+            # Try to extract error message from response
+            error_message = "Failed to fetch token. Please try again later."
+            try:
+                error_data = response.json()
+                if 'message' in error_data:
+                    error_message = error_data['message']
+                elif 'error' in error_data:
+                    error_message = error_data['error']
+            except Exception:
+                error_message = response.text.strip() or error_message
+            # Check for common credential errors
+            if response.status_code == 401 or 'invalid' in error_message.lower() or 'credentials' in error_message.lower():
+                error_message = "Invalid credentials or configuration. Please check your Fyers API keys and settings."
+            return f"""
                 <html>
-                    <body style="text-align: center; font-family: Arial, sans-serif; margin-top: 50px;">
+                    <body style=\"text-align: center; font-family: Arial, sans-serif; margin-top: 50px;\">
                         <h1>❌ Authentication Error</h1>
-                        <p>Failed to fetch token. Please try again later.</p>
+                        <p>{error_message}</p>
                     </body>
                 </html>
             """
