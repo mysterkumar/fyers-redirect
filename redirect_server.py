@@ -27,8 +27,18 @@ def callback():
         if response.status_code == 200:
             try:
                 token_data = response.json()
+                print(f"\n✅ Token data: {token_data}\n")  # Print token data to log
+                return """
+                    <html>
+                        <body style="text-align: center; font-family: Arial, sans-serif; margin-top: 50px;">
+                            <h1>✅ Auth Successful!</h1>
+                            <p>You may close this tab.</p>
+                        </body>
+                    </html>
+                """
             except json.JSONDecodeError:
                 print("\n❌ Error: Invalid JSON response from Fyers API\n")
+                print(f"Response content: {response.text}")
                 return """
                     <html>
                         <body style="text-align: center; font-family: Arial, sans-serif; margin-top: 50px;">
@@ -47,20 +57,6 @@ def callback():
                     </body>
                 </html>
             """
-        
-        # Save token to file
-        with open("access_token.json", "w") as token_file:
-            json.dump(token_data, token_file, indent=4)
-            
-        print(f"\n✅ Token saved to access_token.json\n")
-        return """
-            <html>
-                <body style="text-align: center; font-family: Arial, sans-serif; margin-top: 50px;">
-                    <h1>✅ Auth Successful!</h1>
-                    <p>You may close this tab.</p>
-                </body>
-            </html>
-        """
     except Exception as e:
         print(f"\n❌ Error: {str(e)}\n")
         return f"""
